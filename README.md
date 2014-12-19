@@ -14,6 +14,8 @@ Basic usage:
       }
     });
 
+![basic](https://raw.github.com/jarontai/progress_bar/master/example/progress_bar_basic.gif)
+
 ## Features and bugs
 
 Please file feature requests and bugs at the [issue tracker][tracker].
