@@ -1,19 +1,23 @@
 # progress_bar
 
-A library for Dart developers. It is awesome.
+Progress bar for dart command-line apps. A port of [node-progress][nodeprogress] to [Dart][darthome].
 
 ## Usage
 
-A simple usage example:
+Basic usage:
 
-    import 'package:progress_bar/progress_bar.dart';
-
-    main() {
-      var awesome = new Awesome();
-    }
+    var bar = new ProgressBar(':bar', {'total': 10});
+    var timer = new Timer.periodic(new Duration(seconds: 1), (Timer timer) {
+      bar.tick();
+      if (bar.complete) {
+        timer.cancel();
+      }
+    });
 
 ## Features and bugs
 
 Please file feature requests and bugs at the [issue tracker][tracker].
 
-[tracker]: http://example.com/issues/replaceme
+[tracker]: https://github.com/jarontai/progress_bar/issues
+[nodeprogress]: https://github.com/tj/node-progress
+[darthome]: https://www.dartlang.org/

@@ -7,15 +7,16 @@ import 'package:unittest/unittest.dart';
 import 'package:progress_bar/progress_bar.dart';
 
 main() {
-  group('A group of tests', () {
-    Awesome awesome;
+  group('ProgressBar test 1', () {
+    ProgressBar awesome;
 
     setUp(() {
-      awesome = new Awesome();
+      awesome = new ProgressBar(':bar', {'total': 10});
     });
 
     test('First Test', () {
-      expect(awesome.isAwesome, isTrue);
+      expect(awesome.curr, 0);
     });
   });
+
 }

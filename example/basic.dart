@@ -4,8 +4,14 @@
 library progress_bar.example;
 
 import 'package:progress_bar/progress_bar.dart';
+import 'dart:async';
 
 main() {
-  var awesome = new Awesome();
-  print('awesome: ${awesome.isAwesome}');
+  var bar = new ProgressBar(':bar', {'total': 10});
+  var timer = new Timer.periodic(new Duration(seconds: 1), (Timer timer) {
+    bar.tick();
+    if (bar.complete) {
+      timer.cancel();
+    }
+  });
 }

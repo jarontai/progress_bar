@@ -1,9 +1,9 @@
 name: progress_bar
 description: >
-  A library useful for applications or for sharing on pub.dartlang.org.
+  Progress bar for dart command-line apps. A port of node-progress to Dart.
 version: 0.0.1
-#author: <your name> <email@example.com>
-#homepage: https://www.example.com
+#author: Jaron Tai <jaroncn@gmail.com>
+#homepage: https://github.com/jarontai/progress_bar
 #dependencies:
 #  lib_name: any
 dev_dependencies:
