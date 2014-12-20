@@ -1,4 +1,4 @@
-// Copyright (c) 2014, <your name>. All rights reserved. Use of this source code
+// Copyright (c) 2014, <Jaron Tai>. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
 library progress_bar.base;
@@ -7,27 +7,7 @@ import 'dart:io';
 import 'dart:math';
 
 /**
- * Initialize a `ProgressBar` with the given `format` string and the map `options`.
- *
- * Options:
- *
- *   - `total` total number of ticks to complete
- *   - `width` the displayed width of the progress bar defaulting to total
- *   - `stream` the output stream defaulting to stderr
- *   - `complete` completion character defaulting to "="
- *   - `incomplete` incomplete character defaulting to "-"
- *   - `callback` optional function to call when the progress bar completes
- *   - `clear` will clear the progress bar upon termination
- *
- * Tokens:
- *
- *   - `:bar` the progress bar itself
- *   - `:current` current tick number
- *   - `:total` total ticks
- *   - `:elapsed` time elapsed in seconds
- *   - `:percent` completion percentage
- *   - `:eta` eta in seconds
- *
+ * ProgressBar
  */
 class ProgressBar {
   String format = '';
@@ -43,10 +23,34 @@ class ProgressBar {
   DateTime start;
   String lastDraw;
 
+  /**
+   * Initialize a `ProgressBar` with the given `format` string and the `options` map.
+   *
+   * Format tokens:
+   *
+   *   - `:bar` the progress bar itself
+   *   - `:current` current tick number
+   *   - `:total` total ticks
+   *   - `:elapsed` time elapsed in seconds
+   *   - `:percent` completion percentage
+   *   - `:eta` eta in seconds
+   *
+   * Options:
+   *
+   *   - `total` total number of ticks to complete
+   *   - `width` the displayed width of the progress bar defaulting to total
+   *   - `stream` the output stream defaulting to stderr
+   *   - `complete` completion character defaulting to "="
+   *   - `incomplete` incomplete character defaulting to "-"
+   *   - `callback` optional function to call when the progress bar completes
+   *   - `clear` will clear the progress bar upon termination
+   *
+   *
+   */
   ProgressBar(String format, Map options) {
     this.format = format;
     if (options != null) {
-      this.options.keys.forEach((key) {
+      options.keys.forEach((key) {
         if (options[key] != null) {
           this.options[key] = options[key];
         }
@@ -103,7 +107,7 @@ class ProgressBar {
      var availableSpace = max(0, stdout.terminalColumns - str.replaceAll(':bar', '').length);
      var width = min(this.options['width'], availableSpace);
 
-     /* TODO: the following assumes the user has one ':bar' token */
+     /* the following assumes the user has one ':bar' token */
      var incomplete, complete, completeLength;
      completeLength = (width * ratio).round();
      complete = new List<String>.filled(completeLength, this.options['complete']).join();
@@ -118,7 +122,7 @@ class ProgressBar {
      }
 
      if (this.lastDraw != str) {
-       stdout.writeCharCode(13);
+       stdout.writeCharCode(13); // output carriage return
        stdout.write(str);
        this.lastDraw = str;
      }
@@ -134,29 +138,24 @@ class ProgressBar {
    *
    * A ratio of 0.5 will attempt to set the progress to halfway.
    *
-   * @param {number} ratio The ratio (between 0 and 1 inclusive) to set the
-   *   overall completion to.
-   * @api public
    */
-  update() {
-//    var goal = Math.floor(ratio * this.total);
-//    var delta = goal - this.curr;
-//
-//    this.tick(delta, tokens);
-    throw new UnimplementedError();
+  update(int ratio) {
+    var goal = (ratio * this.options['total']).floor();
+    var delta = goal - this.curr;
+    this.tick(len: delta);
   }
 
   /**
    * Terminates a progress bar.
    *
-   * @api public
    */
   terminate() {
     if (this.options['clear']) {
-//      stdout.writeln();
+      for (int i = 0; i < stdout.terminalColumns; i++) {
+        stdout.writeCharCode(8); // output backspace
+      }
     } else {
-//      console.log();
+      stdout.writeln();
     }
-    stdout.writeln();
   }
 }
