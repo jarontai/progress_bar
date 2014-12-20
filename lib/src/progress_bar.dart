@@ -39,12 +39,9 @@ class ProgressBar {
    *
    *   - `total` total number of ticks to complete
    *   - `width` the displayed width of the progress bar defaulting to total
-   *   - `stream` the output stream defaulting to stderr
    *   - `complete` completion character defaulting to "="
    *   - `incomplete` incomplete character defaulting to "-"
-   *   - `callback` optional function to call when the progress bar completes
    *   - `clear` will clear the progress bar upon termination
-   *
    *
    */
   ProgressBar(String format, Map options) {
@@ -139,7 +136,7 @@ class ProgressBar {
    * A ratio of 0.5 will attempt to set the progress to halfway.
    *
    */
-  update(int ratio) {
+  update(num ratio) {
     var goal = (ratio * this.options['total']).floor();
     var delta = goal - this.curr;
     this.tick(len: delta);
