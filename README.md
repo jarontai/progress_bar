@@ -6,7 +6,7 @@ Progress bar for dart command-line apps. A port of [node-progress][nodeprogress]
 
 Basic usage:
 
-    var bar = new ProgressBar(':bar', {'total': 10});
+    var bar = new ProgressBar(' [:bar] :percent :etas ', {'total': 10});
     var timer = new Timer.periodic(new Duration(seconds: 1), (Timer timer) {
       bar.tick();
       if (bar.complete) {
