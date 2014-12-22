@@ -10,18 +10,16 @@ import 'dart:math';
  * ProgressBar
  */
 class ProgressBar {
-  String format = '';
-  Map options = {
-    'total': 0,
-    'width': 0,
-    'clear': false,
-    'complete': '=',
-    'incomplete': '-'
-  };
+  String format;
+  int total;
+  int width;
+  bool clear = false;
+  String completeChar;
+  String incompleteChar;
   int curr = 0;
-  bool complete = false;
   DateTime start;
   String lastDraw;
+  bool complete = false;
 
   /**
    * Initialize a `ProgressBar` with the given `format` string and the `options` map.
@@ -44,18 +42,21 @@ class ProgressBar {
    *   - `clear` will clear the progress bar upon termination
    *
    */
-  ProgressBar(String format, Map options) {
+  ProgressBar(String format, {int total: 0,
+                              int width,
+                              bool clear: false,
+                              String complete: '=',
+                              String incomplete: '-'}) {
     this.format = format;
-    if (options != null) {
-      options.keys.forEach((key) {
-        if (options[key] != null) {
-          this.options[key] = options[key];
-        }
-      });
-      if (this.options['width'] == 0) {
-        this.options['width'] = this.options['total'];
-      }
+    this.total = total;
+    if (width == null) {
+      this.width = this.total;
+    } else {
+      this.width = width;
     }
+    this.clear = clear;
+    this.completeChar = complete;
+    this.incompleteChar = incomplete;
   }
 
   /**
@@ -70,7 +71,7 @@ class ProgressBar {
     this.render(tokens);
 
     // progress complete
-    if (this.curr >= this.options['total']) {
+    if (this.curr >= this.total) {
       this.complete = true;
       this.terminate();
       return;
@@ -85,30 +86,30 @@ class ProgressBar {
   render(Map tokens) {
     if (!stdout.hasTerminal) return;
 
-     var ratio = this.curr / this.options['total'];
+     var ratio = this.curr / this.total;
      ratio = min(max(ratio, 0), 1);
 
      var percent = ratio * 100;
      var elapsed = new DateTime.now().difference(this.start).inMilliseconds;
-     var eta = (percent == 100) ? 0 : elapsed * (this.options['total'] / this.curr - 1);
+     var eta = (percent == 100) ? 0 : elapsed * (this.total / this.curr - 1);
 
      /* populate the bar template with percentages and timestamps */
      var str = this.format
        .replaceAll(':current', this.curr.toString())
-       .replaceAll(':total', this.options['total'].toString())
+       .replaceAll(':total', this.total.toString())
        .replaceAll(':elapsed', elapsed.isNaN ? '0.0' : (elapsed / 1000).toStringAsFixed(1))
        .replaceAll(':eta', (eta.isNaN || !eta.isFinite) ? '0.0' : (eta / 1000).toStringAsFixed(1))
        .replaceAll(':percent', percent.toStringAsFixed(0) + '%');
 
      /* compute the available space (non-zero) for the bar */
      var availableSpace = max(0, stdout.terminalColumns - str.replaceAll(':bar', '').length);
-     var width = min(this.options['width'], availableSpace);
+     var width = min(this.width, availableSpace);
 
      /* the following assumes the user has one ':bar' token */
      var incomplete, complete, completeLength;
      completeLength = (width * ratio).round();
-     complete = new List<String>.filled(completeLength, this.options['complete']).join();
-     incomplete = new List<String>.filled(width - completeLength, this.options['incomplete']).join();
+     complete = new List<String>.filled(completeLength, this.completeChar).join();
+     incomplete = new List<String>.filled(width - completeLength, this.incompleteChar).join();
 
      /* fill in the actual progress bar */
      str = str.replaceAll(':bar', complete + incomplete);
@@ -137,7 +138,7 @@ class ProgressBar {
    *
    */
   update(num ratio) {
-    var goal = (ratio * this.options['total']).floor();
+    var goal = (ratio * this.total).floor();
     var delta = goal - this.curr;
     this.tick(len: delta);
   }
@@ -147,7 +148,7 @@ class ProgressBar {
    *
    */
   terminate() {
-    if (this.options['clear']) {
+    if (this.clear) {
       for (int i = 0; i < stdout.terminalColumns; i++) {
         stdout.writeCharCode(8); // output backspace
       }

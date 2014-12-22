@@ -6,7 +6,7 @@ Progress bar for dart command-line apps. A port of [node-progress][nodeprogress]
 
 Basic usage:
 
-    var bar = new ProgressBar(' [:bar] :percent :etas ', {'total': 10});
+    var bar = new ProgressBar(' [:bar] :percent :etas ', total: 10);
     var timer = new Timer.periodic(new Duration(seconds: 1), (Timer timer) {
       bar.tick();
       if (bar.complete) {
@@ -18,7 +18,7 @@ Basic usage:
 
 ### Options
 
-These are keys in the options map you can pass to the progress bar along with
+These are keys in the options you can pass to the progress bar along with
 `total` as seen in the example above.
 
 - `total` total number of ticks to complete

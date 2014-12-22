@@ -11,18 +11,17 @@ main() {
     ProgressBar bar;
 
     setUp(() {
-      bar = new ProgressBar(':bar', {'total': 10});
+      bar = new ProgressBar(':bar', total: 10);
     });
 
     test('Intialize Test', () {
       expect(bar.curr, 0);
       expect(bar.complete, false);
-      expect(bar.options, isNotEmpty);
-      expect(bar.options['total'], 10);
-      expect(bar.options['width'], 10);
-      expect(bar.options['clear'], false);
-      expect(bar.options['complete'], '=');
-      expect(bar.options['incomplete'], '-');
+      expect(bar.total, 10);
+      expect(bar.width, 10);
+      expect(bar.clear, false);
+      expect(bar.completeChar, '=');
+      expect(bar.incompleteChar, '-');
     });
   });
 
