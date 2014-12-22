@@ -20,6 +20,7 @@ class ProgressBar {
   DateTime start;
   String lastDraw;
   bool complete = false;
+  Function callback;
 
   /**
    * Initialize a `ProgressBar` with the given `format` string and the `options` map.
@@ -39,6 +40,7 @@ class ProgressBar {
    *   - `width` the displayed width of the progress bar defaulting to total
    *   - `complete` completion character defaulting to "="
    *   - `incomplete` incomplete character defaulting to "-"
+   *   - `callback` optional function to call when the progress bar completes
    *   - `clear` will clear the progress bar upon termination
    *
    */
@@ -46,7 +48,8 @@ class ProgressBar {
                               int width,
                               bool clear: false,
                               String complete: '=',
-                              String incomplete: '-'}) {
+                              String incomplete: '-',
+                              Function callback}) {
     this.format = format;
     this.total = total;
     if (width == null) {
@@ -57,12 +60,13 @@ class ProgressBar {
     this.clear = clear;
     this.completeChar = complete;
     this.incompleteChar = incomplete;
+    this.callback = callback;
   }
 
   /**
    * "tick" the progress bar with optional `len` and optional `tokens`.
    */
-  tick({int len: 1, Map tokens}) {
+   tick({int len: 1, Map tokens}) {
     if (this.curr == 0) {
       this.start = new DateTime.now();
     }
@@ -74,7 +78,9 @@ class ProgressBar {
     if (this.curr >= this.total) {
       this.complete = true;
       this.terminate();
-      return;
+      if (this.callback is Function) {
+        Function.apply(this.callback, [this.complete]);
+      }
     }
   }
 

@@ -7,3 +7,4 @@
 ## 0.1.1
 
 * Make options optional.
+* Add callback function called when the progress bar completes.
