@@ -26,6 +26,7 @@ These are keys in the options you can pass to the progress bar along with
 - `complete` completion character defaulting to "="
 - `incomplete` incomplete character defaulting to "-"
 - `clear` option to clear the bar on completion defaulting to false
+- `callback` optional function to call when the progress bar completes
 
 ### Tokens
 
