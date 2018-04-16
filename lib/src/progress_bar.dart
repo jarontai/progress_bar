@@ -89,11 +89,11 @@ class ProgressBar {
    * progress bar's `format` field.
    *
    */
-  render(Map tokens) {
+  render(Map<String, String> tokens) {
     if (!stdout.hasTerminal) return;
 
      var ratio = this.curr / this.total;
-     ratio = min(max(ratio, 0), 1);
+     ratio = min(max(ratio, 0.0), 1.0);
 
      var percent = ratio * 100;
      var elapsed = new DateTime.now().difference(this.start).inMilliseconds;
@@ -122,7 +122,9 @@ class ProgressBar {
 
      /* replace the extra tokens */
      if (tokens != null) {
-       for (var key in tokens) str = str.replaceAll(':' + key, tokens[key]);
+      tokens.forEach((key, val) {
+        str = str.replaceAll(':' + key, val);
+      });
      }
 
      if (this.lastDraw != str) {

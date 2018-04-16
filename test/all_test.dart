@@ -3,7 +3,7 @@
 
 library progress_bar.test;
 
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import 'package:progress_bar/progress_bar.dart';
 
 main() {
