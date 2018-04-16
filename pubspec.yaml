@@ -4,7 +4,11 @@ version: 0.2.0
 author: Jaron Tai <jaroncn@gmail.com>
 homepage: https://github.com/jarontai/progress_bar
 
+environment:
+  sdk: '>=1.20.1 <2.0.0'
+
 #dependencies:
 #  lib_name: any
+
 dev_dependencies:
   test: ^0.12.0
