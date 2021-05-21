@@ -8,10 +8,10 @@ import 'package:progress_bar/progress_bar.dart';
 
 main() {
   group('ProgressBar test - ', () {
-    ProgressBar bar;
+    late ProgressBar bar;
 
     setUp(() {
-      bar = new ProgressBar(':bar', total: 10);
+      bar = ProgressBar(':bar', total: 10);
     });
 
     test('Intialize Test', () {
@@ -24,5 +24,4 @@ main() {
       expect(bar.incompleteChar, '-');
     });
   });
-
 }
